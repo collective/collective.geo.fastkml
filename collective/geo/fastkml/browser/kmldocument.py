@@ -11,6 +11,9 @@ from shapely.geometry import asShape
 
 class FastKMLBaseDocument(KMLBaseDocument):
 
+    anchorsnippet = '''<p class="placemark-url">
+    <a href="%s">See the original resource</a>
+    </p>'''
 
     def get_kml(self):
         k = kml.KML()
@@ -27,7 +30,10 @@ class FastKMLBaseDocument(KMLBaseDocument):
         docstyle.append_style(pstyle)
         doc.append_style(docstyle)
         for feature in self.features:
-            pm = kml.Placemark(name = feature.name, description=feature.description)
+            description=feature.description
+            if feature.item_url:
+                description += self.anchorsnippet % feature.item_url
+            pm = kml.Placemark(name = feature.name, description=description)
             shape = { 'type': feature.geom.type,
                 'coordinates': feature.geom.coordinates}
             try:
@@ -51,7 +57,6 @@ class FastKMLBaseDocument(KMLBaseDocument):
                     pms.append_style(pstyle)
                 pm.append_style(pms)
             else:
-                #pms = styles.StyleUrl(url="#defaultStyle")
                 pm.styleUrl = "#defaultStyle"
             doc.append(pm)
         xml = '<?xml version="1.0" encoding="UTF-8"?>' + k.to_string()

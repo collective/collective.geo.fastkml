@@ -32,4 +32,5 @@ Re-run buildout, e.g. with:
 ::
     $ ./bin/buildout
 
-activate the product in Plones Add-on configuration section.
+Restart Plone and activate the product in Plones Add-on configuration
+section.

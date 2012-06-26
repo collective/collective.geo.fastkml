@@ -11,7 +11,13 @@ setup(name='collective.geo.fastkml',
       # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
+        "Framework :: Plone :: 4.0",
+        "Framework :: Plone :: 4.1",
         "Programming Language :: Python",
+        "Topic :: Scientific/Engineering :: GIS",
+        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Development Status :: 3 - Alpha',
+        'Operating System :: OS Independent',
         ],
       keywords='',
       author='Christian Ledermann',
@@ -26,6 +32,7 @@ setup(name='collective.geo.fastkml',
           'setuptools',
           # -*- Extra requirements: -*-
           'collective.geo.kml',
+          'fastkml',
       ],
       entry_points="""
       # -*- Entry points: -*-

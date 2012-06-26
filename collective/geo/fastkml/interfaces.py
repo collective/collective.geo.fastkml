@@ -1,0 +1,7 @@
+# -*- coding: utf-8 -*-
+from plone.theme.interfaces import IDefaultPloneLayer
+from collective.geo.kml.interfaces import IGeoKmlLayer
+
+class IGeoFastKmlLayer(IGeoKmlLayer):
+    """Marker interface that defines a Zope 3 browser layer.
+    """

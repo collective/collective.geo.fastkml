@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<layers>
+    <layer name="collective.geo.fastkml"
+           interface="collective.geo.fastkml.interfaces.IGeoFastKmlLayer" />
+</layers>

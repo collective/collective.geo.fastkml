@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="collective.geo.fastkml">
+
+  <browser:page
+      for="collective.geo.geographer.interfaces.IGeoreferenceable"
+      name="kml-document"
+      class=".kmldocument.KMLDocument"
+      layer = "..interfaces.IGeoFastKmlLayer"
+      permission="zope2.View"
+      />
+
+  <!--  was ATBTreeFolder and ATFolder -->
+  <browser:page
+      for="Products.CMFCore.interfaces.IFolderish"
+      name="kml-document"
+      class=".kmldocument.KMLFolderDocument"
+      layer = "..interfaces.IGeoFastKmlLayer"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="Products.ATContentTypes.interface.IATTopic"
+      name="kml-document"
+      layer = "..interfaces.IGeoFastKmlLayer"
+      class=".kmldocument.KMLTopicDocument"
+      permission="zope2.View"
+      />
+
+
+
+</configure>

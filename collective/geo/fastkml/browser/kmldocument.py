@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from App.config import getConfiguration
+
 from zope.component import queryMultiAdapter
 
 from collective.geo.kml.browser.kmldocument import KMLBaseDocument
@@ -59,7 +61,10 @@ class FastKMLBaseDocument(KMLBaseDocument):
             else:
                 pm.styleUrl = "#defaultStyle"
             doc.append(pm)
-        xml = '<?xml version="1.0" encoding="UTF-8"?>' + k.to_string()
+        if getConfiguration().debug_mode:
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' + k.to_string(prettyprint=True)
+        else:
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' + k.to_string()
         return xml
 
     def __call__(self):
@@ -67,7 +72,14 @@ class FastKMLBaseDocument(KMLBaseDocument):
         self.request.response.setHeader(
             'Content-Disposition',
             'attachment; filename="%s"' % filename)
-        return self.get_kml().encode('utf-8')
+        self.request.response.setHeader('Content-Type',
+            'application/vnd.google-earth.kml+xml; charset=utf-8')
+        xml = self.get_kml()
+        try:
+            xml= xml.decode('utf-8', 'ignore')
+        except:
+            pass
+        return xml.encode('utf-8')
 
 class KMLDocument(FastKMLBaseDocument):
 

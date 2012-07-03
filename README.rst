@@ -2,7 +2,7 @@ Introduction
 ============
 
 collective.geo.fastkml replaces the template based generation of
-collective.geo.km with the objectoriented approch of fastkml
+collective.geo.kml with the objectoriented approch of fastkml
 https://github.com/cleder/fastkml
 
 collective.geo.fastkml does support Polygons and MultiPolygons with holes.

@@ -11,14 +11,19 @@ from fastkml import kml, styles
 
 from shapely.geometry import asShape
 
+from collective.geo.fastkml import MessageFactory as _
+from zope.i18n import translate
+
 
 class FastKMLBaseDocument(KMLBaseDocument):
 
-    anchorsnippet = '''<p class="placemark-url">
-    <a href="%s">See the original resource</a>
-    </p>'''
+    def anchorsnippet(self, link):
+        snippettext = self.context.translate(_(u'See the original resource'))
+        return '''<p class="placemark-url">
+            <a href="%s">%s</a></p>''' % (link, snippettext)
 
     def get_kml(self):
+
         k = kml.KML()
         ## make sure description field is encoded properly
         desc = unicode(self.description, \
@@ -39,7 +44,7 @@ class FastKMLBaseDocument(KMLBaseDocument):
             description = unicode(feature.description, \
                                   'utf-8').encode('ascii', 'xmlcharrefreplace')
             if feature.item_url:
-                description += self.anchorsnippet % feature.item_url
+                description += self.anchorsnippet(feature.item_url)
             pm = kml.Placemark(name=feature.name, description=description)
             shape = {'type': feature.geom.type,
                 'coordinates': feature.geom.coordinates}

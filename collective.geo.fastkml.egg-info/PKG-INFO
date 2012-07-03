@@ -1,0 +1,62 @@
+Metadata-Version: 1.0
+Name: collective.geo.fastkml
+Version: 0.1
+Summary: Generate KML with fastkml for collective.geo
+Home-page: https://github.com/collective/collective.geo.fastkml
+Author: Christian Ledermann
+Author-email: christian.ledermann@gmail.com
+License: GPL
+Description: Introduction
+        ============
+        
+        collective.geo.fastkml replaces the template based generation of
+        collective.geo.km with the objectoriented approch of fastkml
+        https://github.com/cleder/fastkml
+        
+        collective.geo.fastkml does support Polygons and MultiPolygons with holes.
+        Depending how many holes your polygons have it may take longer to generate
+        you KML file with collective.geo.fastkml (as collective.geo.kml ignores
+        the holes). Generally collective.geo.fastkml is slightly faster than
+        collective.geo.kml and produces smaller files
+        
+        The style for polygons is created from the linestyle and polygonstyle so
+        polygons can have an outline that is diffrent from the polygon fill style
+        
+        collective.geo.fastkml does not have an interface of its own, it just
+        overrides the kml-document view of collective.geo.kml.
+        
+        Installation
+        ============
+        
+        Add ``collective.geo.fastkml`` to the list of eggs to install, e.g.:
+        ::
+            [buildout]
+            ...
+            eggs =
+                ...
+                collective.geo.fastkml
+        
+        Re-run buildout, e.g. with:
+        ::
+            $ ./bin/buildout
+        
+        Restart Plone and activate the product in Plones Add-on configuration
+        section.
+        
+        Changelog
+        =========
+        
+        0.1  (2012/06/29)
+        -------------------
+        
+        - Initial release
+        
+Platform: UNKNOWN
+Classifier: Framework :: Plone
+Classifier: Framework :: Plone :: 4.0
+Classifier: Framework :: Plone :: 4.1
+Classifier: Programming Language :: Python
+Classifier: Topic :: Scientific/Engineering :: GIS
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Development Status :: 3 - Alpha
+Classifier: Operating System :: OS Independent

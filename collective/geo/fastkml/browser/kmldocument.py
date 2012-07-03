@@ -11,6 +11,7 @@ from fastkml import kml, styles
 
 from shapely.geometry import asShape
 
+
 class FastKMLBaseDocument(KMLBaseDocument):
 
     anchorsnippet = '''<p class="placemark-url">
@@ -19,24 +20,28 @@ class FastKMLBaseDocument(KMLBaseDocument):
 
     def get_kml(self):
         k = kml.KML()
-        doc = kml.Document(name = self.name, description=self.description)
+        ## make sure description field is encoded properly
+        desc = unicode(self.description, \
+                       'utf-8').encode('ascii', 'xmlcharrefreplace')
+        doc = kml.Document(name=self.name, description=desc)
         k.append(doc)
         docstyle = styles.Style(id="defaultStyle")
         istyle = styles.IconStyle(scale=self.marker_image_size,
                 icon_href=self.marker_image,
                 color=self.polygoncolor)
-        lstyle = styles.LineStyle(color=self.linecolor, width=self.linewidth )
+        lstyle = styles.LineStyle(color=self.linecolor, width=self.linewidth)
         pstyle = styles.PolyStyle(color=self.polygoncolor)
         docstyle.append_style(istyle)
         docstyle.append_style(lstyle)
         docstyle.append_style(pstyle)
         doc.append_style(docstyle)
         for feature in self.features:
-            description=feature.description
+            description = unicode(feature.description, \
+                                  'utf-8').encode('ascii', 'xmlcharrefreplace')
             if feature.item_url:
                 description += self.anchorsnippet % feature.item_url
-            pm = kml.Placemark(name = feature.name, description=description)
-            shape = { 'type': feature.geom.type,
+            pm = kml.Placemark(name=feature.name, description=description)
+            shape = {'type': feature.geom.type,
                 'coordinates': feature.geom.coordinates}
             try:
                 pm.geometry = asShape(shape)
@@ -45,14 +50,14 @@ class FastKMLBaseDocument(KMLBaseDocument):
             if feature.use_custom_styles:
                 pms = styles.Style()
                 if feature.geom.type in ['Point', 'MultiPoint']:
-                    istyle= styles.IconStyle(scale=feature.marker_image_size,
+                    istyle = styles.IconStyle(scale=feature.marker_image_size,
                         icon_href=feature.marker_image,
                         color=feature.polygoncolor)
                     pms.append_style(istyle)
                 elif feature.geom.type in ['LineString', 'MultiLineString',
                                             'Polygon', 'MultiPolygon']:
                     lstyle = styles.LineStyle(color=feature.linecolor,
-                                    width=feature.linewidth )
+                                    width=feature.linewidth)
                     pms.append_style(lstyle)
                 if feature.geom.type in ['Polygon', 'MultiPolygon']:
                     pstyle = styles.PolyStyle(color=feature.polygoncolor)
@@ -62,7 +67,8 @@ class FastKMLBaseDocument(KMLBaseDocument):
                 pm.styleUrl = "#defaultStyle"
             doc.append(pm)
         if getConfiguration().debug_mode:
-            xml = '<?xml version="1.0" encoding="UTF-8"?>' + k.to_string(prettyprint=True)
+            xml = '<?xml version="1.0" encoding="UTF-8"?>' + \
+                    k.to_string(prettyprint=True)
         else:
             xml = '<?xml version="1.0" encoding="UTF-8"?>' + k.to_string()
         return xml
@@ -76,10 +82,11 @@ class FastKMLBaseDocument(KMLBaseDocument):
             'application/vnd.google-earth.kml+xml; charset=utf-8')
         xml = self.get_kml()
         try:
-            xml= xml.decode('utf-8', 'ignore')
+            xml = xml.decode('utf-8', 'ignore')
         except:
             pass
         return xml.encode('utf-8')
+
 
 class KMLDocument(FastKMLBaseDocument):
 

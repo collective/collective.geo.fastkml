@@ -32,7 +32,7 @@ class FastKMLBaseDocument(KMLBaseDocument):
         docstyle.append_style(pstyle)
         doc.append_style(docstyle)
         for feature in self.features:
-            description=feature.description
+            description=feature.description + feature.lead_image()
             if feature.item_url:
                 description += self.anchorsnippet % feature.item_url
             pm = kml.Placemark(name = feature.name, description=description)
@@ -42,6 +42,7 @@ class FastKMLBaseDocument(KMLBaseDocument):
                 pm.geometry = asShape(shape)
             except:
                 continue
+            pm.author = feature.author['name']
             if feature.use_custom_styles:
                 pms = styles.Style()
                 if feature.geom.type in ['Point', 'MultiPoint']:
@@ -81,6 +82,24 @@ class FastKMLBaseDocument(KMLBaseDocument):
             pass
         return xml.encode('utf-8')
 
+class FastBrainPlacemark(BrainPlacemark):
+
+    imagesnippet='''<a class="placemark-image"
+    href="%(url)s/view">
+    <img src="%(url)s/image_%(scale)s" alt="%(name)s" title="%(name)s"
+    class="%(class)s"></a>'''
+
+    def lead_image(self, scale='thumb', css_class="tileImage"):
+        if self.item_type == 'Image':
+            return self.imagesnippet % { 'url': self.item_url,
+                    'scale': scale, 'name': self.name, 'class': css_class }
+        else:
+            return ''
+
+
+
+
+
 class KMLDocument(FastKMLBaseDocument):
 
     @property
@@ -95,16 +114,21 @@ class KMLFolderDocument(FastKMLBaseDocument):
 
     @property
     def features(self):
-        for item in self.context.values():
-            feature = queryMultiAdapter((item, self.request), IFeature)
-            if not feature:
+        for brain in self.context.getFolderContents():
+            try:
+                if brain.zgeo_geometry['coordinates']:
+                    yield FastBrainPlacemark(brain, self.request, self)
+            except:
                 continue
-            yield feature
-
 
 class KMLTopicDocument(FastKMLBaseDocument):
 
     @property
     def features(self):
         for brain in self.context.queryCatalog():
-            yield BrainPlacemark(brain, self.request, self)
+            try:
+                if brain.zgeo_geometry['coordinates']:
+                    yield FastBrainPlacemark(brain, self.request, self)
+            except:
+                continue
+

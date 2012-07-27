@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1'
+version = '0.2'
 
 setup(name='collective.geo.fastkml',
       version=version,
@@ -16,7 +16,7 @@ setup(name='collective.geo.fastkml',
         "Programming Language :: Python",
         "Topic :: Scientific/Engineering :: GIS",
         'License :: OSI Approved :: GNU General Public License (GPL)',
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
         ],
       keywords='',

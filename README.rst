@@ -20,16 +20,16 @@ overrides the kml-document view of collective.geo.kml.
 Installation
 ============
 
-Add ``collective.geo.fastkml`` to the list of eggs to install, e.g.:
-::
+Add ``collective.geo.fastkml`` to the list of eggs to install, e.g.
+
     [buildout]
     ...
     eggs =
         ...
         collective.geo.fastkml
 
-Re-run buildout, e.g. with:
-::
+Re-run buildout, e.g. with
+
     $ ./bin/buildout
 
 Restart Plone and activate the product in Plones Add-on configuration

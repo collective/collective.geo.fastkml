@@ -41,10 +41,12 @@ class FastKMLBaseDocument(KMLBaseDocument):
         docstyle.append_style(pstyle)
         doc.append_style(docstyle)
         for feature in self.features:
-            description= feature.lead_image()
-            description += unicode(feature.description, \
+            description =''
+            if feature.lead_image():
+                description += feature.lead_image()
+            if feature.description:
+                description += unicode(feature.description, \
                                   'utf-8').encode('ascii', 'xmlcharrefreplace')
-
             if feature.item_url:
                 description += self.anchorsnippet(feature.item_url)
             pm = kml.Placemark(name=feature.name, description=description)
@@ -101,7 +103,7 @@ class FastBrainPlacemark(BrainPlacemark):
     imagesnippet='''<a class="placemark-image"
     href="%(url)s/view">
     <img src="%(url)s/image_%(scale)s" alt="%(name)s" title="%(name)s"
-    class="%(class)s"></a>'''
+    class="%(class)s" /></a>'''
 
     def lead_image(self, scale='thumb', css_class="tileImage"):
         if self.item_type == 'Image':

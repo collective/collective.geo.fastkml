@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.2 (2012/07/27)
+-----------------
+  be sure to update fastkml as well,
+  this removes the dependency on shapely
+
+- for folders and topics: do only add the feature if it has a geometry
+- faster placemark generation for folders
+- add Atom:Author to kml
+- add preview image to description
+- add i18n support (Maarten Kling)
+
+
 0.1  (2012/06/29)
 -------------------
 

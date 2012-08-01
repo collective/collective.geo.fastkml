@@ -9,7 +9,11 @@ from collective.geo.kml.interfaces import IFeature
 
 from fastkml import kml, styles
 
-from shapely.geometry import asShape
+try:
+    from shapely.geometry import asShape
+except:
+    from pygeoif import as_shape as asShape
+
 
 from collective.geo.fastkml import MessageFactory as _
 from zope.i18n import translate
@@ -49,7 +53,8 @@ class FastKMLBaseDocument(KMLBaseDocument):
                                   'utf-8').encode('ascii', 'xmlcharrefreplace')
             if feature.item_url:
                 description += self.anchorsnippet(feature.item_url)
-            pm = kml.Placemark(name=feature.name, description=description)
+            name = unicode(feature.name, 'utf-8').encode('ascii', 'xmlcharrefreplace')
+            pm = kml.Placemark(name=name, description=description)
             shape = {'type': feature.geom.type,
                 'coordinates': feature.geom.coordinates}
             try:
@@ -57,6 +62,8 @@ class FastKMLBaseDocument(KMLBaseDocument):
             except:
                 continue
             pm.author = feature.author['name']
+            if feature.item_url:
+                pm.link = unicode(feature.item_url, 'utf-8')
             if feature.use_custom_styles:
                 pms = styles.Style()
                 if feature.geom.type in ['Point', 'MultiPoint']:
@@ -111,6 +118,15 @@ class FastBrainPlacemark(BrainPlacemark):
                     'scale': scale, 'name': self.name, 'class': css_class }
         else:
             return ''
+
+    @property
+    def item_type(self):
+        return self.context.portal_type
+
+    @property
+    def item_url(self):
+        return self.context.getURL()
+
 
 
 class KMLDocument(FastKMLBaseDocument):

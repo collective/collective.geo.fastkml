@@ -30,9 +30,10 @@ class FastKMLBaseDocument(KMLBaseDocument):
 
         k = kml.KML()
         ## make sure description field is encoded properly
-        desc = unicode(self.description, \
-                       'utf-8').encode('ascii', 'xmlcharrefreplace')
-        doc = kml.Document(name=self.name, description=desc)
+        doc = kml.Document(
+            name=unicode(self.name, 'utf-8'), 
+            description=unicode(self.description, 'utf-8')
+        )
         k.append(doc)
         docstyle = styles.Style(id="defaultStyle")
         istyle = styles.IconStyle(scale=self.marker_image_size,
@@ -49,11 +50,10 @@ class FastKMLBaseDocument(KMLBaseDocument):
             if feature.lead_image():
                 description += feature.lead_image()
             if feature.description:
-                description += unicode(feature.description, \
-                                  'utf-8').encode('ascii', 'xmlcharrefreplace')
+                description += unicode(feature.description, 'utf-8')
             if feature.item_url:
                 description += self.anchorsnippet(feature.item_url)
-            name = unicode(feature.name, 'utf-8').encode('ascii', 'xmlcharrefreplace')
+            name = unicode(feature.name, 'utf-8')
             pm = kml.Placemark(name=name, description=description)
             shape = {'type': feature.geom.type,
                 'coordinates': feature.geom.coordinates}

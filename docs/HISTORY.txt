@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3 (unreleased)
+----------------
+
+- Output KML in UTF-8, without XML character encoding
+
 0.2 (2012/07/27)
 -----------------
   be sure to update fastkml as well,

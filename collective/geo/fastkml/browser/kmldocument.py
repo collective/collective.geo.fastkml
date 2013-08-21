@@ -45,9 +45,10 @@ class FastKMLBaseDocument(KMLBaseDocument):
         PolyStyle = partial(styles.PolyStyle, ns=namespace)
 
         k = KML()
+
         ## make sure description field is encoded properly
         doc = Document(
-            name=unicode(self.name, 'utf-8'), 
+            name=unicode(self.name, 'utf-8'),
             description=unicode(self.description, 'utf-8')
         )
         k.append(doc)
@@ -155,21 +156,17 @@ class KMLFolderDocument(FastKMLBaseDocument):
 
     @property
     def features(self):
-        for brain in self.context.getFolderContents():
-            try:
-                if brain.zgeo_geometry['coordinates']:
-                    yield FastBrainPlacemark(brain, self.request, self)
-            except:
+        for item in self.context.values():
+            feature = queryMultiAdapter((item, self.request), IFeature)
+            if not feature:
                 continue
+            yield feature
+
 
 class KMLTopicDocument(FastKMLBaseDocument):
 
     @property
     def features(self):
         for brain in self.context.queryCatalog():
-            try:
-                if brain.zgeo_geometry['coordinates']:
-                    yield FastBrainPlacemark(brain, self.request, self)
-            except:
-                continue
+            yield FastBrainPlacemark(brain, self.request, self)
 

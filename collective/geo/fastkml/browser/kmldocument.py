@@ -43,6 +43,10 @@ class FastKMLBaseDocument(KMLBaseDocument):
         IconStyle = partial(styles.IconStyle, ns=namespace)
         LineStyle = partial(styles.LineStyle, ns=namespace)
         PolyStyle = partial(styles.PolyStyle, ns=namespace)
+        UntypedExtendedData = partial(kml.UntypedExtendedData, ns=namespace)
+        UntypedExtendedDataElement = partial(
+            kml.UntypedExtendedDataElement, ns=namespace
+        )
 
         k = KML()
 
@@ -99,6 +103,19 @@ class FastKMLBaseDocument(KMLBaseDocument):
                 pm.append_style(pms)
             else:
                 pm.styleUrl = "#defaultStyle"
+
+            extended_data = UntypedExtendedData()
+            for element in feature.extended_data:
+                extended_data.elements.append(
+                    UntypedExtendedDataElement(
+                        name=element.name,
+                        value=element.value,
+                        display_name=element.display_name
+                    )
+                )
+            if extended_data.elements:
+                pm.extended_data = extended_data
+
             doc.append(pm)
         if getConfiguration().debug_mode:
             xml = u'<?xml version="1.0" encoding="UTF-8"?>' + \
@@ -140,6 +157,9 @@ class FastBrainPlacemark(BrainPlacemark):
     def item_url(self):
         return self.context.getURL()
 
+    @property
+    def extended_data(self):
+        return []
 
 
 class KMLDocument(FastKMLBaseDocument):

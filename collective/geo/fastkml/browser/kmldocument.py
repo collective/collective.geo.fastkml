@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from functools import partial
 from App.config import getConfiguration
 
 from zope.component import queryMultiAdapter
@@ -16,7 +17,6 @@ except:
 
 
 from collective.geo.fastkml import MessageFactory as _
-from zope.i18n import translate
 
 
 class FastKMLBaseDocument(KMLBaseDocument):
@@ -28,19 +28,35 @@ class FastKMLBaseDocument(KMLBaseDocument):
 
     def get_kml(self):
 
-        k = kml.KML()
+        # Some programs consuming kml cannot handle kml namespaces. For those
+        # programs the supress-kml-namespace parameter may be used.
+        # e.g. .../@@kml-document?suppress-kml-prefix
+        if self.request.get('supress-kml-prefix', None) is not None:
+            namespace = ''  # no kml namespace prefixes
+        else:    
+            namespace = None  # use default
+
+        KML = partial(kml.KML, ns=namespace)
+        Document = partial(kml.Document, ns=namespace)
+        Placemark = partial(kml.Placemark, ns=namespace)
+        Style = partial(styles.Style, ns=namespace)
+        IconStyle = partial(styles.IconStyle, ns=namespace)
+        LineStyle = partial(styles.LineStyle, ns=namespace)
+        PolyStyle = partial(styles.PolyStyle, ns=namespace)
+
+        k = KML()
         ## make sure description field is encoded properly
-        doc = kml.Document(
+        doc = Document(
             name=unicode(self.name, 'utf-8'), 
             description=unicode(self.description, 'utf-8')
         )
         k.append(doc)
-        docstyle = styles.Style(id="defaultStyle")
-        istyle = styles.IconStyle(scale=self.marker_image_size,
+        docstyle = Style(id="defaultStyle")
+        istyle = IconStyle(scale=self.marker_image_size,
                 icon_href=self.marker_image,
                 color=self.polygoncolor)
-        lstyle = styles.LineStyle(color=self.linecolor, width=self.linewidth)
-        pstyle = styles.PolyStyle(color=self.polygoncolor)
+        lstyle = LineStyle(color=self.linecolor, width=self.linewidth)
+        pstyle = PolyStyle(color=self.polygoncolor)
         docstyle.append_style(istyle)
         docstyle.append_style(lstyle)
         docstyle.append_style(pstyle)
@@ -54,7 +70,7 @@ class FastKMLBaseDocument(KMLBaseDocument):
             if feature.item_url:
                 description += self.anchorsnippet(feature.item_url)
             name = unicode(feature.name, 'utf-8')
-            pm = kml.Placemark(name=name, description=description)
+            pm = Placemark(name=name, description=description)
             shape = {'type': feature.geom.type,
                 'coordinates': feature.geom.coordinates}
             try:
@@ -65,19 +81,19 @@ class FastKMLBaseDocument(KMLBaseDocument):
             if feature.item_url:
                 pm.link = unicode(feature.item_url, 'utf-8')
             if feature.use_custom_styles:
-                pms = styles.Style()
+                pms = Style()
                 if feature.geom.type in ['Point', 'MultiPoint']:
-                    istyle = styles.IconStyle(scale=feature.marker_image_size,
+                    istyle = IconStyle(scale=feature.marker_image_size,
                         icon_href=feature.marker_image,
                         color=feature.polygoncolor)
                     pms.append_style(istyle)
                 elif feature.geom.type in ['LineString', 'MultiLineString',
                                             'Polygon', 'MultiPolygon']:
-                    lstyle = styles.LineStyle(color=feature.linecolor,
+                    lstyle = LineStyle(color=feature.linecolor,
                                     width=feature.linewidth)
                     pms.append_style(lstyle)
                 if feature.geom.type in ['Polygon', 'MultiPolygon']:
-                    pstyle = styles.PolyStyle(color=feature.polygoncolor)
+                    pstyle = PolyStyle(color=feature.polygoncolor)
                     pms.append_style(pstyle)
                 pm.append_style(pms)
             else:

@@ -4,7 +4,9 @@ Changelog
 0.3 (unreleased)
 ----------------
 
-- Output KML in UTF-8, without XML character encoding
+- Output KML in UTF-8, without XML character encoding (Denis Krienbuehl)
+- The "kml:" prefix may no be supressed if the view is called as follows:
+  .../@@kml-document?suppress-kml-prefix (Denis Krienbuehl)
 
 0.2 (2012/07/27)
 -----------------

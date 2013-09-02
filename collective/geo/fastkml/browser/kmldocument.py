@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from functools import partial
 from App.config import getConfiguration
 
@@ -18,6 +19,8 @@ except:
 
 from collective.geo.fastkml import MessageFactory as _
 
+logger = logging.getLogger('collective.geo.fastkml')
+
 
 class FastKMLBaseDocument(KMLBaseDocument):
 
@@ -33,7 +36,7 @@ class FastKMLBaseDocument(KMLBaseDocument):
         # e.g. .../@@kml-document?suppress-kml-prefix
         if self.request.get('supress-kml-prefix', None) is not None:
             namespace = ''  # no kml namespace prefixes
-        else:    
+        else:
             namespace = None  # use default
 
         KML = partial(kml.KML, ns=namespace)
@@ -103,19 +106,20 @@ class FastKMLBaseDocument(KMLBaseDocument):
                 pm.append_style(pms)
             else:
                 pm.styleUrl = "#defaultStyle"
-
-            extended_data = UntypedExtendedData()
-            for element in feature.extended_data:
-                extended_data.elements.append(
-                    UntypedExtendedDataElement(
-                        name=element.name,
-                        value=element.value,
-                        display_name=element.display_name
+            try:
+                extended_data = UntypedExtendedData()
+                for element in feature.extended_data:
+                    extended_data.elements.append(
+                        UntypedExtendedDataElement(
+                            name=element.name,
+                            value=element.value,
+                            display_name=element.display_name
+                        )
                     )
-                )
-            if extended_data.elements:
-                pm.extended_data = extended_data
-
+                if extended_data.elements:
+                    pm.extended_data = extended_data
+            except AttributeError as e:
+                logger.debug(e.message)
             doc.append(pm)
         if getConfiguration().debug_mode:
             xml = u'<?xml version="1.0" encoding="UTF-8"?>' + \

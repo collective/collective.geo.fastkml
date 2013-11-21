@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4 (unreleased)
+----------------
+
+- Fixes suppress-kml-prefix typo (was supress-kml-prefix with one 'p')
+  (Denis Krienbuehl)
+
 0.3 (2013/09/05)
 ----------------
 

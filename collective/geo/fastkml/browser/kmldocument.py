@@ -34,9 +34,9 @@ class FastKMLBaseDocument(KMLBaseDocument):
     def get_kml(self):
 
         # Some programs consuming kml cannot handle kml namespaces. For those
-        # programs the supress-kml-namespace parameter may be used.
+        # programs the suppress-kml-namespace parameter may be used.
         # e.g. .../@@kml-document?suppress-kml-prefix
-        if self.request.get('supress-kml-prefix', None) is not None:
+        if self.request.get('suppress-kml-prefix', None) is not None:
             namespace = ''  # no kml namespace prefixes
         else:
             namespace = None  # use default

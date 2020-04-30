@@ -17,6 +17,13 @@ polygons can have an outline that is different from the polygon fill style.
 overrides the kml-document view of collective.geo.kml.
 
 
+Documentation
+=============
+
+Full documentation for end users can be found in the "docs" folder.
+It is also available online at https://collectivegeo.readthedocs.io/
+
+
 Translations
 ============
 

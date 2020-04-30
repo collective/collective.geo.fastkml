@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+
+[plone-collective.collective-geo-fastkml-pot]
+file_filter = collective/geo/fastkml/locales/<lang>/LC_MESSAGES/collective.geo.fastkml.po
+minimum_perc = 0
+source_file = collective/geo/fastkml/locales/collective.geo.fastkml.pot
+source_lang = en
+type = PO
+

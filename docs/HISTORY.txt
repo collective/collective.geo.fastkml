@@ -4,6 +4,8 @@ Changelog
 0.4 (unreleased)
 ----------------
 
+- Add Transifex.net service integration to manage the translation process.
+  [Leonardo J. Caballero G., macagua]
 - Added Spanish translation
   [Leonardo J. Caballero G., macagua]
 - Fixes suppress-kml-prefix typo (was supress-kml-prefix with one 'p')

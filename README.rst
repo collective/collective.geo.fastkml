@@ -16,6 +16,21 @@ polygons can have an outline that is diffrent from the polygon fill style
 collective.geo.fastkml does not have an interface of its own, it just
 overrides the kml-document view of collective.geo.kml.
 
+
+Translations
+============
+
+This product has been translated into
+
+- Dutch.
+
+- Spanish.
+
+You can contribute for any message missing or other new languages, join us at 
+`Plone Collective Team <https://www.transifex.com/plone/plone-collective/>`_ 
+into *Transifex.net* service with all world Plone translators community.
+
+
 Installation
 ============
 
